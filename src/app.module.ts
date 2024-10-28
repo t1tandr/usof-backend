@@ -15,7 +15,7 @@ import { CommentsModule } from './comments/comments.module';
 import { LikesModule } from './likes/likes.module';
 import * as path from 'path';
 import { Like } from "./likes/likes.model";
-import { Comment } from "./comments/coments.model";
+import { Comment } from "./comments/comments.model";
 
 @Module({
 	controllers: [],

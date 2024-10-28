@@ -4,7 +4,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Like } from './likes.model';
 import { Post } from 'src/posts/posts.model';
 import { User } from 'src/users/users.model';
-import { Comment } from 'src/comments/coments.model';
+import { Comment } from 'src/comments/comments.model';
 
 @Module({
   imports: [

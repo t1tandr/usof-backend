@@ -3,9 +3,14 @@ import { Like } from "src/likes/likes.model";
 import { Post } from "src/posts/posts.model";
 import { User } from "src/users/users.model";
 
+interface CommentCreationAttrs {
+	content: string,
+	postId: number,
+	userId: number
+}
 
 @Table({ tableName: 'comments' })
-export class Comment extends Model<Comment> {
+export class Comment extends Model<Comment, CommentCreationAttrs> {
 	@Column({
 		type: DataType.INTEGER,
 		unique: true,

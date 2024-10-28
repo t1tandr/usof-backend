@@ -1,5 +1,5 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
-import { Comment } from "src/comments/coments.model";
+import { Comment } from "src/comments/comments.model";
 import { Post } from "src/posts/posts.model";
 import { User } from "src/users/users.model";
 
