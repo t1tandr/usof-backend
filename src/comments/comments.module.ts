@@ -4,12 +4,15 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Comment } from './coments.model';
 import { Post } from 'src/posts/posts.model';
 import { User } from 'src/users/users.model';
+import { Like } from 'src/likes/likes.model';
+import { LikesModule } from 'src/likes/likes.module';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([
       Comment, Post, User
-    ])
+    ]),
+    LikesModule
   ],
   providers: [CommentsService]
 })
