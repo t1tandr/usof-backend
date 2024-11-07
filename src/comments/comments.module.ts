@@ -14,6 +14,7 @@ import { LikesModule } from 'src/likes/likes.module';
     ]),
     LikesModule
   ],
-  providers: [CommentsService]
+  providers: [CommentsService],
+  exports: [CommentsService]
 })
 export class CommentsModule {}

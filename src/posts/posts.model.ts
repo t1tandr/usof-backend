@@ -9,6 +9,7 @@ import {
 	Model,
 	Table,
 } from 'sequelize-typescript'
+import { Category } from 'src/categories/categories.model';
 import { Like } from 'src/likes/likes.model';
 import { User } from 'src/users/users.model'
 
@@ -65,4 +66,11 @@ export class Post extends Model<Post, PostCreationAttrs> {
 
 	@HasMany(() => Like, { foreignKey: 'postId', constraints: false })
 	likes: Like[]
+
+	@ForeignKey(() => Category)
+	@Column({ type: DataType.INTEGER, allowNull: false })
+	categoryId: number
+
+	@BelongsTo(() => Category)
+	category: Category
 }

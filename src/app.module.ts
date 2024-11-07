@@ -16,6 +16,8 @@ import { LikesModule } from './likes/likes.module';
 import * as path from 'path';
 import { Like } from "./likes/likes.model";
 import { Comment } from "./comments/comments.model";
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from "./categories/categories.model";
 
 @Module({
 	controllers: [],
@@ -34,8 +36,9 @@ import { Comment } from "./comments/comments.model";
 			username: process.env.POSTGRES_USER,
 			password: process.env.POSTGRES_PASSWORD,
 			database: process.env.POSTGRES_DB,
-			models: [User, Role, UserRoles, Post , Like, Comment],
+			models: [User, Role, UserRoles, Post , Like, Comment, Category],
 			autoLoadModels: true,
+			// synchronize: true,
 		}),
 		UsersModule,
 		RolesModule,
@@ -44,6 +47,7 @@ import { Comment } from "./comments/comments.model";
 		FilesModule,
 		CommentsModule,
 		LikesModule,
+		CategoriesModule,
 	],
 })
 export class AppModule {}

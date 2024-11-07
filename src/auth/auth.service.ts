@@ -12,7 +12,7 @@ export class AuthService {
     ) {}
 
     async login(userDto: CreateUserDto) {
-        const user = await this.validateUser(userDto)
+        const user = await this.userService.getUserByEmail(userDto.email)
         return this.generateToken(user);
 	}
 
@@ -46,6 +46,6 @@ export class AuthService {
         if(user && passwordEquals) {
             return user;
         }
-        throw new UnauthorizedException({message: 'Uncorrect e-mail or password'})
+        throw new UnauthorizedException({message: 'Incorrect e-mail or password'})
     }
 }

@@ -1,25 +1,20 @@
+
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNumber, isNumber, IsString } from 'class-validator'
+import { IsString, IsNumber } from 'class-validator'
 
 export class CreateCommentDto {
 	@ApiProperty({
-		example: 'It`s so funny',
-		description: 'Main content of comment',
+		example: 'Great post!',
+		description: 'Content of the comment',
 	})
-	@IsString({ message: 'Should be a string value' })
-	readonly content: string
+	@IsString()
+	content: string
 
-	@ApiProperty({
-		example: '4',
-		description: 'Post`s ID',
-	})
-	@IsNumber({}, { message: 'Should be a NUM value' })
-	readonly postId: number;
+	@ApiProperty({ example: 1, description: 'ID of the post' })
+	@IsNumber()
+	postId: number
 
-	@ApiProperty({
-		example: '5',
-		description: 'User`s ID',
-	})
-	@IsNumber({}, { message: 'Should be a NUM value' })
-	readonly userId: number
+	@ApiProperty({ example: 2, description: 'ID of the user' })
+	@IsNumber()
+	userId: number
 }

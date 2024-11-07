@@ -32,9 +32,12 @@ export class UsersService {
     async addRole(dto: AddRoleDto) {
         const user = await this.UserRepository.findByPk(dto.userId);
         const role = await this.roleService.getRoleByValue(dto.value);
+        console.log(role.value);
+        console.log(user.id)
         if (role && user) {
-            await user.$add('role', role.id);
-            return dto;
+            await user.$add('role', role.id)
+            await user.reload({ include: { all: true } }) 
+            return user.roles
         }
         throw new HttpException('User or role are not found', HttpStatus.NOT_FOUND)
     }

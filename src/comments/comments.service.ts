@@ -28,5 +28,4 @@ export class CommentsService {
         await comment.destroy();
         return { message: 'Comment was deleted successfully'}
     }
-
 }
