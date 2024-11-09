@@ -10,11 +10,6 @@ export class CreateCommentDto {
 	@IsString()
 	content: string
 
-	@ApiProperty({ example: 1, description: 'ID of the post' })
-	@IsNumber()
 	postId: number
-
-	@ApiProperty({ example: 2, description: 'ID of the user' })
-	@IsNumber()
 	userId: number
 }

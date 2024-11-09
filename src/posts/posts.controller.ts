@@ -1,13 +1,25 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Request, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
-import { CreatePostDto } from './dto/create-post.dto';
-import { PostsService } from './posts.service';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Post as PostModel } from './posts.model';
-import { CreateCommentDto } from 'src/comments/dto/create-comment.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { isatty } from 'tty';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Patch,
+	Post,
+	Query,
+	Request,
+	UploadedFile,
+	UseGuards,
+	UseInterceptors,
+} from '@nestjs/common'
+import { CreatePostDto } from './dto/create-post.dto'
+import { PostsService } from './posts.service'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { Post as PostModel } from './posts.model'
+import { CreateCommentDto } from 'src/comments/dto/create-comment.dto'
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { UpdatePostDto } from './dto/update-post.dto'
 
 @ApiTags('Posts')
 @Controller('api/posts')
@@ -15,22 +27,29 @@ export class PostsController {
 	constructor(private postService: PostsService) {}
 
 	@Get()
-	async getAllPosts(@Query('page') page: number, @Query('limit') limit: number) {
+	async getAllPosts(
+		@Query('page') page: number,
+		@Query('limit') limit: number
+	) {
 		return this.postService.getAllPosts(page, limit)
 	}
 
 	@Get(':id')
 	async getPostById(@Param('id') id: number) {
-		return this.postService.getPostById(id);
+		return this.postService.getPostById(id)
 	}
 
-	@ApiOperation({ summary: 'Creating a post'})
+	@ApiOperation({ summary: 'Creating a post' })
 	@ApiResponse({ status: 200, type: PostModel })
 	@Post()
 	@UseGuards(JwtAuthGuard)
 	@UseInterceptors(FileInterceptor('image'))
-	createPost(@Request() req, @Body() dto: CreatePostDto, @UploadedFile() image) {
-		const userId = req.user.id;
+	createPost(
+		@Request() req,
+		@Body() dto: CreatePostDto,
+		@UploadedFile() image
+	) {
+		const userId = req.user.id
 		return this.postService.create(dto, image, userId)
 	}
 
@@ -38,29 +57,57 @@ export class PostsController {
 	async updatePost(
 		@Param('id') id: number,
 		@Body() dto: UpdatePostDto,
-		@Request() req
+		@Request() req,
 	) {
-		const userId = req.user.id;
-		const roles = req.user['roles'];
-		const isAdmin = roles.some(role => role.value === 'ADMIN');
-		return this.postService.updatePost(id, dto, userId, isAdmin);
+		const userId = req.user.id
+		const roles = req.user['roles']
+		const isAdmin = roles.some(role => role.value === 'ADMIN')
+		return this.postService.updatePost(id, dto, userId, isAdmin)
 	}
 
 	@Get(':postId/comments')
 	getAllComments(@Param('postId') postId: number) {
-		return this.postService.getAllCommentsForPost(postId);
+		return this.postService.getAllCommentsForPost(postId)
 	}
 
 	@UseGuards(JwtAuthGuard)
 	@Post(':postId/comments')
-	createComment(@Request() req, @Param('postId') postId: number, @Body() dto: CreateCommentDto){
-		const userId = req.user.id;
-		return this.postService.createCommentForPost(postId, dto, userId);
+	createComment(
+		@Request() req,
+		@Param('postId') postId: number,
+		@Body() dto: CreateCommentDto
+	) {
+		const userId = req.user.id
+		return this.postService.createCommentForPost(postId, dto, userId)
 	}
 
+	@UseGuards(JwtAuthGuard)
+	@Post(':postId/like')
+	async likePost(@Param('postId') postId: number, @Request() req: any) {
+		const userId = req.user.id;
+		return this.postService.likePost(postId, userId);
+	}
+
+	@UseGuards(JwtAuthGuard)
+	@Delete(':postId/like')
+	async unlikePost(@Param('postId') postId: number, @Request() req: any) {
+		const userId = req.user.id;
+		return this.postService.unlikePost(postId, userId);
+	}
+
+	@Get(':postId/likes')
+	async countLikes(@Param('postId') postId: number) {
+		return this.postService.countPostLikes(postId);
+	}
+
+	@Get(':postId/users')
+	async getUsersWhoLikedPost(@Param('postId') postId: number) {
+		return this.postService.getUsersWhoLikedPost(postId);
+	}
+	
 	@Delete(':id')
 	async deletePost(@Param('id') id: number, @Request() req) {
-		const userId = req.user.id;
+		const userId = req.user.id
 		const roles = req.user['roles']
 		const isAdmin = roles.some(role => role.value === 'ADMIN')
 		return this.postService.deletePost(id, userId, isAdmin)
