@@ -4,7 +4,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Comment } from './comments.model';
 import { Post } from 'src/posts/posts.model';
 import { User } from 'src/users/users.model';
-import { Like } from 'src/likes/likes.model';
+import Like from 'src/likes/likes.model';
 import { LikesModule } from 'src/likes/likes.module';
 import { CommentsController } from './comments.controller';
 import { AuthModule } from 'src/auth/auth.module';

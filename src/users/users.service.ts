@@ -1,15 +1,39 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './users.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RolesService } from 'src/roles/roles.service';
 import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
 
     constructor(@InjectModel(User) private UserRepository: typeof User, private roleService: RolesService) {}
+
+    async findByEmail(email: string){
+        const user = await this.UserRepository.findOne({where: {email}});
+        if(!user) {
+            throw new NotFoundException('User not found');
+        }
+        return user;
+    }
+
+    async findById(id: number) {
+        const user = await this.UserRepository.findByPk(id);
+        if(!user) {
+            throw new NotFoundException('User not found');
+        }
+        return user;
+    }
+
+    async updatePassword(id: number, newPassword: string) {
+        const user = await this.findById(id);
+        const hashedPassword = await bcrypt.hash(newPassword, 5);
+        user.password = hashedPassword;
+        await user.save()
+    }
 
     async createUser(dto: CreateUserDto){
         const user = await this.UserRepository.create(dto);
@@ -56,4 +80,6 @@ export class UsersService {
         await user.save();
         return user;
     }
+
+
 }

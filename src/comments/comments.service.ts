@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Comment } from './comments.model';
-import { Like } from 'src/likes/likes.model';
+import Like from 'src/likes/likes.model';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
 @Injectable()

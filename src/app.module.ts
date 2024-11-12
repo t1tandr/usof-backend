@@ -14,10 +14,11 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import { CommentsModule } from './comments/comments.module';
 import { LikesModule } from './likes/likes.module';
 import * as path from 'path';
-import { Like } from "./likes/likes.model";
+import Like from "./likes/likes.model";
 import { Comment } from "./comments/comments.model";
 import { CategoriesModule } from './categories/categories.module';
 import { Category } from "./categories/categories.model";
+import { MailModule } from './mail/mail.module';
 
 @Module({
 	controllers: [],
@@ -48,6 +49,7 @@ import { Category } from "./categories/categories.model";
 		CommentsModule,
 		LikesModule,
 		CategoriesModule,
+		MailModule,
 	],
 })
 export class AppModule {}

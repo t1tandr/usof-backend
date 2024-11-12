@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/sequelize'
-import { Like } from './likes.model'
+import Like from './likes.model'
 import { User } from 'src/users/users.model'
 
 @Injectable()

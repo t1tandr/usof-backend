@@ -12,7 +12,8 @@ export class CreatePostDto {
     readonly content: string;
 
     @ApiProperty({ example: '5', description: 'User ID, who wants to create post' })
-    @IsNumber({}, { message: 'Should be a NUM value'})
+    // @IsNumber({}, { message: 'Should be a NUM value' })
     @IsNotEmpty()
-    readonly categoryId: number; 
+    private readonly categoryId: number; 
+
 }

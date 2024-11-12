@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger'
 import {
-    BelongsTo,
+	BelongsTo,
 	BelongsToMany,
 	Column,
 	DataType,
@@ -9,20 +9,20 @@ import {
 	Model,
 	Table,
 } from 'sequelize-typescript'
-import { Category } from 'src/categories/categories.model';
-import { Like } from 'src/likes/likes.model';
+import { Category } from 'src/categories/categories.model'
+import Like from 'src/likes/likes.model'
 import { User } from 'src/users/users.model'
 
 interface PostCreationAttrs {
-	title: string;
-	content: string;
-    userId: number;
-    image: string;
+	title: string
+	content: string
+	userId: number
+	image: string
 }
 
 @Table({ tableName: 'posts' })
 export class Post extends Model<Post, PostCreationAttrs> {
-	@ApiProperty({ example: '1', description: 'Post id' })
+	@ApiProperty({ example: '1', description: 'Unique identifier for the post' })
 	@Column({
 		type: DataType.INTEGER,
 		unique: true,
@@ -31,7 +31,7 @@ export class Post extends Model<Post, PostCreationAttrs> {
 	})
 	id: number
 
-	@ApiProperty({ example: 'Weather', description: 'Title for post' })
+	@ApiProperty({ example: 'Weather', description: 'Title of the post' })
 	@Column({
 		type: DataType.STRING,
 		allowNull: false,
@@ -40,7 +40,7 @@ export class Post extends Model<Post, PostCreationAttrs> {
 
 	@ApiProperty({
 		example: 'Weather is bad today',
-		description: 'Description for post',
+		description: 'Content or description of the post',
 	})
 	@Column({
 		type: DataType.STRING,
@@ -48,13 +48,16 @@ export class Post extends Model<Post, PostCreationAttrs> {
 	})
 	content: string
 
-	@ApiProperty({ example: 'sun.jpg', description: 'Image for post' })
+	@ApiProperty({
+		example: 'sun.jpg',
+		description: 'Image associated with the post',
+	})
 	@Column({
 		type: DataType.STRING,
 	})
 	image: string
 
-	@ApiProperty({ example: '5', description: 'UserId who did the post' })
+	@ApiProperty({ example: '5', description: 'User ID who created the post' })
 	@ForeignKey(() => User)
 	@Column({
 		type: DataType.INTEGER,
@@ -67,6 +70,10 @@ export class Post extends Model<Post, PostCreationAttrs> {
 	@HasMany(() => Like, { foreignKey: 'postId', constraints: false })
 	likes: Like[]
 
+	@ApiProperty({
+		example: '3',
+		description: 'Category ID to which the post belongs',
+	})
 	@ForeignKey(() => Category)
 	@Column({ type: DataType.INTEGER, allowNull: false })
 	categoryId: number
