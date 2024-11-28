@@ -15,6 +15,7 @@ interface UserCreationAttrs {
   email: string
   password: string
   username: string
+  avatar?: string
 }
 
 @Table({ tableName: 'users' })
@@ -50,6 +51,12 @@ export class User extends Model<User, UserCreationAttrs> {
     allowNull: false,
   })
   password: string
+
+  @ApiProperty({ example: 'avatar.png', description: 'User avatar file name' })
+  @Column({
+    type: DataType.STRING,
+  })
+  avatar: string
 
   @ApiProperty({ example: 'false', description: 'user status' })
   @Column({

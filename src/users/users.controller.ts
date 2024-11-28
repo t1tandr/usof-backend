@@ -1,10 +1,15 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
+  Param,
+  Patch,
   Post,
   Request,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common'
@@ -17,6 +22,8 @@ import { RolesGuard } from 'src/auth/roles.guard'
 import { AddRoleDto } from './dto/add-role.dto'
 import { BanUserDto } from './dto/ban-user.dto'
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { FileInterceptor } from '@nestjs/platform-express'
+import { UpdateUserDto } from './dto/update-user.dto'
 
 @ApiTags('Users')
 @Controller('users')
@@ -46,6 +53,24 @@ export class UsersController {
   @Post('/role')
   addRole(@Request() req, @Body() dto: AddRoleDto) {
     return this.usersService.addRole(dto)
+  }
+
+  @ApiOperation({ summary: 'Update user data (e.g., avatar)' })
+  @ApiResponse({ status: 200, description: 'Updated user data' })
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('avatar'))
+  async updateUser(
+    @Param('id') id: number,
+    @Body() dto: UpdateUserDto,
+    @UploadedFile() avatar: any,
+    @Request() req
+  ) {
+    const userId = req.user.id
+    if (userId !== Number(id)) {
+      throw new ForbiddenException('You can only update your own profile')
+    }
+    return this.usersService.updateUser(userId, dto, avatar)
   }
 
   @ApiOperation({ summary: 'Ban users' })

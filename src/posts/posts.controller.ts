@@ -62,7 +62,7 @@ export class PostsController {
   }
 
   @ApiOperation({ summary: 'Create a new post' })
-  @ApiBearerAuth() // Requires JWT authentication
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Created post', type: PostModel })
   @Post()
   @UseGuards(JwtAuthGuard)

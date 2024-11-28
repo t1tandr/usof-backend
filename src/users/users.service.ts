@@ -11,11 +11,14 @@ import { RolesService } from 'src/roles/roles.service'
 import { AddRoleDto } from './dto/add-role.dto'
 import { BanUserDto } from './dto/ban-user.dto'
 import * as bcrypt from 'bcryptjs'
+import { UpdateUserDto } from './dto/update-user.dto'
+import { FilesService } from 'src/files/files.service'
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User) private UserRepository: typeof User,
+    private fileService: FilesService,
     private roleService: RolesService
   ) {}
 
@@ -47,7 +50,26 @@ export class UsersService {
     const role = await this.roleService.getRoleByValue('USER')
     await user.$set('roles', [role.id])
     user.roles = [role]
+
     return user
+  }
+
+  async updateUser(userId: number, dto: UpdateUserDto, avatar?: any) {
+    const user = await this.UserRepository.findByPk(userId)
+    if (!user) {
+      throw new NotFoundException('User not found')
+    }
+    if (avatar) {
+      const filename = await this.fileService.createFile(avatar)
+      await user.update({
+        ...dto,
+        avatar: filename,
+      })
+      return user
+    } else {
+      await user.update(dto)
+      return user
+    }
   }
 
   async getAllUsers() {

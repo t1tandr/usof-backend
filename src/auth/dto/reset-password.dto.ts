@@ -6,7 +6,7 @@ export class ResetPasswordDto {
     example: 'some-reset-token',
     description: 'The token for resetting the password, usually sent via email',
   })
-  @IsString()
+  // @IsString()
   token: string
 
   @ApiProperty({
@@ -14,7 +14,7 @@ export class ResetPasswordDto {
     description:
       'The new password for the user account, minimum length of 6 characters',
   })
-  @IsString()
-  @MinLength(6, { message: 'Password must be at least 6 characters long' })
+  // @IsString()
+  // @MinLength(6, { message: 'Password must be at least 6 characters long' })
   newPassword: string
 }

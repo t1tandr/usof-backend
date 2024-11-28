@@ -1,15 +1,23 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { CreateUserDto } from 'src/users/dto/create-user.dto'
 import { AuthService } from './auth.service'
 import { ForgotPasswordDto } from './dto/forgot-password.dto'
 import { ResetPasswordDto } from './dto/reset-password.dto'
 import { LoginUserDto } from 'src/users/dto/login-user.dto'
+import { JwtAuthGuard } from './jwt-auth.guard'
 
 @ApiTags('Authorization')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Post('/auth')
+  @UseGuards(JwtAuthGuard)
+  async checkAuth(@Req() req: any) {
+    const user = req.user
+    return this.authService.generateToken(user);
+  }
 
   @ApiOperation({ summary: 'Login to the system' })
   @ApiResponse({
